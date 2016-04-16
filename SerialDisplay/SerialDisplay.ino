@@ -37,18 +37,124 @@
 
 // include the library code:
 #include <LiquidCrystal.h>
+byte fuel1[8] = {0b11111,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b11111
+};
+
+byte fuel2[8] = {
+  0b11111,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b11111,
+  0b11111
+};
+
+byte fuel3[8] =   {
+  0b11111,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b11111,
+  0b11111,
+  0b11111
+};
+
+byte fuel4[8] = {
+  0b11111,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111
+};
+
+byte fuel5[8] = {
+  0b11111,
+  0b10001,
+  0b10001,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111
+};
+
+byte fuel6[8] = {
+  0b11111,
+  0b10001,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111
+};
+
+byte fuel7[8] = {
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111
+};
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 char dataread[256];
+
 int i,datalength;
 
+int lcdcount = 0;
+
 void setup(){
-    // set up the LCD's number of columns and rows: 
+
+  lcd.createChar(0,fuel1);
+  lcd.createChar(1,fuel2);
+  lcd.createChar(2,fuel3);
+  lcd.createChar(3,fuel4);
+  lcd.createChar(4,fuel5);
+  lcd.createChar(5,fuel6);
+  lcd.createChar(6,fuel7);
+  
+  // set up the LCD's number of columns and rows: 
   lcd.begin(16, 2);
   // initialize the serial communications:
   Serial1.begin(115200);
   Serial.begin(9600);
+
+  lcd.write("Hello");
+  delay(1000);
+
+  lcd.write(byte(0));
+  delay(1000);
+  lcd.write(byte(1));
+  delay(1000);
+  lcd.write(byte(2));
+  delay(1000);
+  lcd.write(byte(3));
+  delay(1000);
+  lcd.write(byte(4));
+  delay(1000);
+  lcd.write(byte(5));
+  delay(1000);
+  lcd.write(byte(6));
+  delay(1000);
+
 }
 
 void loop()
@@ -62,6 +168,7 @@ void loop()
     // read all the available characters
     i = 0;
     datalength = 0;
+    lcd.setCursor(0,0);
     while (Serial1.available() > 0) {
       // display each character to the LCD
       dataread[i++] = Serial1.read();
@@ -70,6 +177,44 @@ void loop()
     {
       lcd.write(dataread[datalength]);
       Serial.write(dataread[datalength++]);
+    }
+    lcd.setCursor(0,1);
+    switch (lcdcount){
+      case 0:{
+        lcd.write(byte(0));
+        lcdcount++;
+        break;
+      }
+      case 1:{
+        lcd.write(byte(1));
+        lcdcount++;
+        break;
+      }
+      case 2:{
+        lcd.write(byte(2));
+        lcdcount++;
+        break;
+      }
+      case 3:{
+        lcd.write(byte(3));
+        lcdcount++;
+        break;
+      }
+      case 4:{
+        lcd.write(byte(4));
+        lcdcount++;
+        break;
+      }
+      case 5:{
+        lcd.write(byte(5));
+        lcdcount++;
+        break;
+      }
+      case 6:{
+        lcd.write(byte(6));
+        lcdcount = 0;
+        break;
+      }
     }
   }
 }
